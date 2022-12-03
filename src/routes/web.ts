@@ -3,7 +3,7 @@ import { CrudController } from '@api/CrudController'
 
 const router = Router();
 
-router.get('/:crud', (req:Request, res: Response) => {
+router.get('/:crud/:id/get', (req:Request, res: Response) => {
     CrudController.get(req, res)
 });
 
