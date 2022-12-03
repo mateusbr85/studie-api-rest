@@ -11,4 +11,12 @@ router.post("/:crud/insert", (req: Request, res: Response) => {
     CrudController.insert(req, res)
 })
 
+router.post("/:crud/update", (req: Request, res: Response) => {
+    CrudController.update(req, res)
+})
+
+router.delete("/:crud/:id/delete", (req: Request, res: Response) => {
+    CrudController.delete(req, res)
+})
+
 export default router;
