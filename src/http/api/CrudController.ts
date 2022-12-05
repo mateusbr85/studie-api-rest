@@ -1,8 +1,10 @@
 import { Request, Response } from "express"
-import mongoose from "mongoose";
+import pluralize from "pluralize"
+
 
 const isModelCrud = async (crud:any) => {
     try {
+        crud = pluralize.singular(crud)
         const istancedClass = (await require('@models/' + crud))?.default;
         return istancedClass
     }catch (e:any) {
@@ -23,7 +25,6 @@ export class CrudController {
     static async get(req:any, res:any){
         const {crud,id}:any = req.params
         let query: any = null;
-        console.log({crud},{id})
         const model = await isModelCrud(req.params.crud);
 
         if(model !== null && id ){
@@ -36,6 +37,20 @@ export class CrudController {
         }
 
         return await responseFuntion(query,res)
+    }
+
+    static async list(req:Request, res:Response){
+        let query = null;
+        const model = await isModelCrud(req.params.crud);
+
+        if(model !== null){
+            query = await model.find({}).sort({ _id: -1})
+                .then((response: Array<any>) => {return response})
+                .catch((err:any) => {console.log(err)})
+
+            await responseFuntion(query,res);
+            return;
+        }
     }
     
     static async insert(req:Request, res:Response){
